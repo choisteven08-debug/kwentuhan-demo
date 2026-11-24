@@ -1,0 +1,15 @@
+{
+  "name": "Kwentuhan · Coca-Cola family stories (prototype)",
+  "short_name": "Kwentuhan",
+  "description": "A weekly family question, unlocked by a glass Coke 2-pack.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#E1000A",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

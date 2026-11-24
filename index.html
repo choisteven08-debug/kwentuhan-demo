@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kwentuhan · Every Coke opens a story (concept demo)</title>
+<meta name="description" content="Interactive concept demo: a weekly family question for Filipino Gen Z newcomers, unlocked by a glass Coke 2-pack and kept as the family's story.">
+<meta name="theme-color" content="#E1000A">
+<link rel="preload" href="assets/fonts/archivo-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-head">
+  <a class="brand" href="#top" aria-label="Kwentuhan concept demo, home">
+    <img class="logo-light" src="assets/img/coca-cola-script-red.png" alt="Coca-Cola" width="92" height="30">
+    <img class="logo-dark" src="assets/img/coca-cola-script-white.png" alt="Coca-Cola" width="92" height="30">
+    <span>Kwentuhan · concept demo</span>
+  </a>
+  <a class="btn btn-quiet" href="#how">How it works</a>
+</header>
+
+<main id="top">
+  <section class="intro" aria-labelledby="h1">
+    <div>
+      <h1 id="h1">Every Coke opens a story.</h1>
+      <p class="lede">A weekly family question for Filipino Gen Z newcomers. Buying a glass Coke 2-pack unlocks it, Lola answers by voice, and the story is kept in the family's tapestry.</p>
+      <div class="actions">
+        <button class="btn btn-primary" id="start">Start the demo</button>
+        <button class="btn btn-quiet" id="reset">Start over</button>
+      </div>
+      <div class="narrative" aria-live="polite">
+        <div class="where"><b id="n-prong">The App</b><span id="n-step">Step 1 of 9</span></div>
+        <h2 id="n-title">Monday: a new question arrives</h2>
+        <p id="n-body">Every Monday the same question goes to every family. It stays locked until someone buys a glass Coke 2-pack.</p>
+        <ol class="steps" id="n-steps" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+      </div>
+    </div>
+    <div class="device" id="device">
+      <div class="app" id="app" aria-label="Coca-Cola app demo" role="application"></div>
+    </div>
+  </section>
+
+  <section class="how" id="how" aria-labelledby="how-h">
+    <div class="how-inner">
+      <div class="side">
+        <h2 id="how-h">How the recommendation works</h2>
+        <p>Three parts, one weekly habit. The 2-pack creates the moment, the app makes it worth repeating, and the community brings Gen Z in.</p>
+      </div>
+      <ol class="prongs">
+        <li><span class="n">01</span>
+          <div><h3>The Pack</h3><div class="role">Creates the moment</div>
+          <p>A glass Coke 2-pack: one for you, one for Lola. A shelf card beside it points to the app. The pack itself doesn't change.</p></div>
+          <div class="fact"><strong>37%</strong>of Coke in the Philippines is sold in glass bottles</div></li>
+        <li><span class="n">02</span>
+          <div><h3>The App</h3><div class="role">Makes it worth repeating</div>
+          <p>A new question every Monday, written by Filipino advisors. Lola answers by voice; it's transcribed, translated, and framed by a Filipino artist.</p></div>
+          <div class="fact"><strong>~66 days</strong>for a weekly habit to become automatic</div></li>
+        <li><span class="n">03</span>
+          <div><h3>The Community</h3><div class="role">Brings Gen Z in</div>
+          <p>Stories become short subtitled clips that families post on TikTok and Reels. Launch in Winnipeg with student associations, churches and settlement agencies.</p></div>
+          <div class="fact"><strong>1 in 10</strong>people in Winnipeg is Filipino</div></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <p><strong>Concept prototype</strong> for a BU111 live case at Wilfrid Laurier University. Not affiliated with, or endorsed by, The Coca-Cola Company. No data leaves your device: recordings stay in your browser and receipt scanning and transcription are simulated.</p>
+  <p>Facts: Coca-Cola Europacific Partners (2024); Philstar (2026); Lally et al. (2010); Statistics Canada (2026). Tagalog lines should be checked by a Filipino speaker. Type: Archivo (SIL Open Font License).</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

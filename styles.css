@@ -135,6 +135,16 @@ body { background: var(--surface-sunken); }
 .receipt hr { border: 0; border-top: 1px dashed #999; margin: 6px 0; }
 .receipt .ln { display: flex; justify-content: space-between; gap: 8px; }
 .receipt .hit { background: #FFE6A3; }
+.receiptcard { margin: 0 var(--s4); background: #FBFAF6; color: #1A1A1A; border: 1px solid var(--border); border-radius: 4px; padding: 16px 16px 20px; font: 500 .8125rem/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+.receiptcard .c { text-align: center; }
+.receiptcard hr { border: 0; border-top: 1px dashed #8A8A8A; margin: 8px 0; }
+.receiptcard .ln { display: flex; justify-content: space-between; gap: 8px; }
+.receiptcard .hit { background: #FFE6A3; }
+.receiptcard .codebox { border: 1.5px solid #1A1A1A; padding: 10px; text-align: center; margin-top: 4px; }
+.receiptcard .code { font-size: 1.25rem; font-weight: 700; letter-spacing: .06em; margin: 4px 0; }
+.codeinput { font: 650 1.375rem/1.2 var(--font); letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; min-height: 56px; }
+.codeinput::placeholder { color: var(--text-secondary); opacity: .55; letter-spacing: .08em; }
+.input[aria-invalid="true"] { border-color: var(--accent); }
 .scanline { position: absolute; left: 6%; right: 6%; height: 2px; background: var(--accent); top: 10%; opacity: 0; }
 .scanning .scanline { opacity: 1; animation: scan 1.4s ease-in-out infinite alternate; }
 @keyframes scan { to { top: 88%; } }

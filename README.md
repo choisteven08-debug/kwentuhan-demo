@@ -7,7 +7,7 @@ Open it on a phone. On a laptop it shows in a phone frame with a QR code.
 ## What works
 - **Family setup**, or load a sample family (the Rosas, 5 weeks in).
 - **Weekly question.** A new one every Monday from a 12-week season, in Tagalog and English.
-- **Unlock by receipt.** Reads a receipt photo on the phone (Tesseract OCR). Checks for a glass Coke 2-pack, a date in the last 7 days, and that the receipt hasn't been used before. A sample receipt is built in.
+- **Unlock with a receipt code.** Buying a glass Coke 2-pack prints a 12-character code on the receipt (`XXXX-XXXX-XXXX`), and you type it into the app. The code holds the purchase day and store, plus check characters that catch typos and made-up codes. It works once and only within 7 days. O/0 and I/L mix-ups are forgiven. "Show a sample receipt" prints a working code for demos. In the prototype, codes are checked on the phone; in production the checkout system would issue them and a server would check them.
 - **Free monthly question**, no purchase needed. **Find a 2-pack** opens maps for the big chains.
 - **Consent** from the storyteller before the first recording.
 - **Recording** with the real microphone. Live transcript where the browser supports it (Tagalog or English).
@@ -24,6 +24,6 @@ Everything is stored on the device (IndexedDB). No server or accounts.
 A static site with no build step. On Vercel: Import → Framework preset **Other** → Deploy.
 
 ## Credits
-Archivo font (SIL OFL), Tesseract.js (Apache 2.0), qrcode-generator (MIT).
+Archivo font (SIL OFL), qrcode-generator (MIT).
 
 Student prototype for a university case competition. Not affiliated with, or endorsed by, The Coca-Cola Company.

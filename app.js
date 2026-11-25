@@ -231,7 +231,7 @@
       body = `${head}
         <div class="lockcard"><div class="lockline"><span style="color:var(--accent)">${ic("lock", 22)}</span><div><div class="heading" style="font-size:1.0625rem">Unlocks with a glass Coke 2-pack</div><div class="caption">One for you, one for ${esc(display(tellers()[0]) || "Lola")}</div></div></div>
           <div class="mt5 qblur" aria-hidden="true"><div class="q-tl">${esc(q1)}</div><div class="q-en">${esc(q2)}</div></div></div>
-        <div class="footer-actions mt2"><button class="primary" data-go="scan">${ic("receipt", 20)} Scan your receipt</button><button class="secondary" data-go="stores">${ic("pin", 20)} Find a glass 2-pack</button></div>
+        <div class="footer-actions mt2"><button class="primary" data-go="code">${ic("receipt", 20)} Enter receipt code</button><button class="secondary" data-go="stores">${ic("pin", 20)} Find a glass 2-pack</button></div>
         <div class="list mt5">${free
           ? `<button class="row" data-act="free"><span class="grow"><span class="r1" style="display:block">Use this month's free question</span><span class="r2" style="display:block">One a month, no purchase needed</span></span><span class="chev">${ic("chev", 18)}</span></button>`
           : `<div class="row"><span class="grow"><span class="r1" style="display:block">Free question used for ${fmtDate(mondayFor(w), { month: "long" })}</span><span class="r2" style="display:block">A new one comes next month</span></span></div>`}</div>`;
@@ -263,37 +263,40 @@
     <div class="group-label">Look for this card beside the glass Coke</div>
     <div style="margin:0 var(--s4);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex">
       <div style="background:#E1000A;color:#fff;padding:14px;flex:1"><div style="font:var(--caption);opacity:.9">Week ${wis(weekNow())} · Family question</div><div style="font:750 1.25rem/1.15 var(--font);font-stretch:85%;margin-top:4px">This week's question is waiting.</div></div>
-      <div style="padding:14px;font:var(--caption);color:var(--text-secondary);width:44%">Buy a glass Coke 2-pack, scan the receipt in the Coca-Cola app, ask Lola at your next meal.</div>
+      <div style="padding:14px;font:var(--caption);color:var(--text-secondary);width:44%">Buy a glass Coke 2-pack. Your receipt prints a code for the Coca-Cola app.</div>
     </div>
-    <div class="footer-actions mt2"><button class="primary" data-go="scan">${ic("receipt", 20)} I have my receipt</button></div></div>`;
+    <div class="footer-actions mt2"><button class="primary" data-go="code">${ic("receipt", 20)} I have my receipt code</button></div></div>`;
   };
 
-  V.scan = () => {
-    const s = U.scan || (U.scan = { state: "idle" });
-    const preview = s.img ? `<img src="${s.img}" alt="Your receipt">` : `<div class="placeholder">${ic("receipt", 40, 1.4)}<div class="mt2">Take a photo of the whole receipt, flat and in good light.</div></div>`;
-    const camera = (label, cls) => `<span class="${cls} filebtn">${ic("camera", 20)} ${label}<input type="file" accept="image/*" capture="environment" data-file="receipt" aria-label="${label}"></span>`;
-    let status = "", actions;
-    if (s.state === "reading") {
-      status = `<div class="progress mt2" aria-hidden="true"><i id="ocrbar" style="width:${Math.round((s.pct || 0) * 100)}%"></i></div><p class="caption mt2" id="ocrmsg">${esc(s.msg || "Reading the receipt…")}</p>`;
-      actions = "";
-    } else if (s.state === "done") {
-      status = s.checks.map((c) => checkRow(c.ok, esc(c.text), c.warn ? "warn" : c.ok ? "" : "fail")).join("");
-      actions = s.pass ? `<button class="primary" data-act="open-week">Open this week's question</button>`
-        : `${camera("Try another photo", "primary")}<button class="secondary" data-act="sample-receipt">Try a sample receipt</button>`;
-    } else {
-      actions = `${camera("Take a photo", "primary")}
-        <span class="secondary filebtn">${ic("image", 20)} Choose from photos<input type="file" accept="image/*" data-file="receipt" aria-label="Choose from photos"></span>
-        <button class="secondary" data-act="sample-receipt">Try a sample receipt</button>`;
-    }
-    return `${nav("Back", "week", "Scan receipt")}
-      <div class="view"><div class="page"><h2 class="title" tabindex="-1">Scan your receipt</h2><p class="caption mt1">Any store. We look for a glass Coke 2-pack bought in the last 7 days.</p></div>
-      <div class="viewfinder ${s.state === "reading" ? "scanning" : ""}">${preview}<div class="scanline" aria-hidden="true"></div></div>
-      <div class="page" aria-live="polite" id="scanstatus">${status}</div>
-      ${s.text && s.state === "done" ? `<details class="more"><summary>What the scanner read</summary><p>${esc(s.text)}</p></details>` : ""}
-      <div class="footer-actions">${actions}</div>
-      <p class="caption page mt3">The receipt is read on this phone. The photo isn't kept.</p></div>`;
+  V.code = () => {
+    const c = U.code || (U.code = { value: "", err: "", result: null, sample: null });
+    const r = c.result;
+    if (r && r.pass) return `${nav("Back", "week", "Receipt code")}
+      <div class="view"><div class="page"><h2 class="title" tabindex="-1">Code accepted</h2><p class="caption mt1">${esc(fmtCode(r.code))}</p></div>
+      <div class="page mt3" aria-live="polite">${r.checks.map((k) => checkRow(k.ok, esc(k.text))).join("")}</div>
+      <div class="footer-actions mt2"><button class="primary" data-act="open-week">Open this week's question</button></div></div>`;
+    return `${nav("Back", "week", "Receipt code")}
+      <div class="view"><form id="codeform" novalidate>
+      <div class="page"><h2 class="title" tabindex="-1">Enter your receipt code</h2><p class="caption mt1">Printed at the bottom of your receipt when you buy a glass Coke 2-pack.</p></div>
+      <label class="field"><span>Receipt code</span>
+        <input class="input codeinput" id="codein" name="code" value="${esc(c.value)}" inputmode="text" autocomplete="one-time-code" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="14" placeholder="XXXX-XXXX-XXXX" aria-describedby="codehint codeerr" ${c.err ? 'aria-invalid="true"' : ""}>
+        <em class="hint" id="codehint">12 letters and numbers. Dashes are added for you.</em><em class="err" id="codeerr" role="alert">${esc(c.err)}</em></label>
+      ${r && !r.pass ? `<div class="page mt3" aria-live="polite">${r.checks.map((k) => checkRow(k.ok, esc(k.text), k.ok ? "" : "fail")).join("")}</div>` : ""}
+      <div class="footer-actions mt2"><button class="primary" type="submit">Unlock this week's question</button></div>
+      </form>
+      ${c.sample ? `<div class="group-label">Sample receipt</div>${receiptHTML(c.sample)}<div class="footer-actions" style="padding-top:var(--s3)"><button class="secondary" data-act="fill-code">Fill in this code</button><button class="secondary" data-act="sample-receipt">Print another receipt</button></div>`
+        : `<div class="group-label">No receipt with you?</div><div class="list"><button class="row" data-act="sample-receipt"><span class="muted">${ic("receipt", 22, 1.8)}</span><span class="grow"><span class="r1" style="display:block">Show a sample receipt</span><span class="r2" style="display:block">A checkout receipt with a working code</span></span><span class="chev">${ic("chev", 18)}</span></button></div>`}
+      <p class="caption page mt4">Each code works once, for 7 days after purchase. In this prototype codes are checked on this phone; in the real app the checkout system and the Coca-Cola app check them together.</p></div>`;
   };
-
+  function receiptHTML(r) {
+    const d = new Date(r.at), pad = (n) => String(n).padStart(2, "0");
+    const lines = [["BANANAS", "1.29"], ["JASMINE RICE 8KG", "21.97"], ["COKE GLASS 2PK 237ML", "2.79"], ["PANDESAL 12CT", "4.49"]];
+    return `<div class="receiptcard" aria-label="Sample receipt">
+      <div class="c"><b>${esc(STORES[r.store])}</b><br>WINNIPEG MB<br>${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${String(d.getFullYear()).slice(2)} ${pad(d.getHours())}:${pad(d.getMinutes())}</div><hr>
+      ${lines.map(([a, b]) => `<div class="ln ${/COKE/.test(a) ? "hit" : ""}"><span>${a}</span><span>${b}</span></div>`).join("")}<hr>
+      <div class="ln"><span>SUBTOTAL</span><span>30.54</span></div><div class="ln"><span>GST 5%</span><span>1.53</span></div><div class="ln"><b>TOTAL</b><b>32.07</b></div><hr>
+      <div class="codebox"><div>FAMILY QUESTION CODE</div><div class="code">${esc(fmtCode(r.code))}</div><div>Enter in the Coca-Cola app by ${esc(fmtDate(d.getTime() + 7 * DAY, { month: "short", day: "numeric" }).toUpperCase())}</div></div></div>`;
+  }
   V.consent = () => {
     const t = member(U.teller), y = you();
     return `${nav("Back", "week", "Consent")}
@@ -445,7 +448,7 @@
       </div>
       <div class="group-label">Your family's archive</div>
       <div class="list"><button class="row" data-act="save-tapestry"><span class="grow r1">Save tapestry image</span></button><button class="row" data-act="wipe"><span class="grow r1 danger">Delete our family's archive</span></button></div>
-      <p class="caption page mt4">Everything is stored on this phone only. Translation sends text to MyMemory only when you tap Translate. Student prototype for a BU111 live case at Wilfrid Laurier University; not affiliated with, or endorsed by, The Coca-Cola Company. Type: Archivo (SIL Open Font License). Receipt reading: Tesseract.js (Apache 2.0).</p></div>${tabbar("settings")}`;
+      <p class="caption page mt4">Everything is stored on this phone only. Translation sends text to MyMemory only when you tap Translate. Student prototype for a BU111 live case at Wilfrid Laurier University; not affiliated with, or endorsed by, The Coca-Cola Company. Type: Archivo (SIL Open Font License).</p></div>${tabbar("settings")}`;
   };
   let installEvt = null;
   window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; });
@@ -480,6 +483,22 @@
     cleanups.push(r.kill);
   };
   MOUNT.story = () => bindPlayer();
+  MOUNT.code = () => {
+    const form = $("#codeform"); if (!form) return;
+    const inp = $("#codein"), err = $("#codeerr");
+    inp.addEventListener("input", () => {
+      const raw = inp.value.toUpperCase().replace(/[^0-9A-Z]/g, "").slice(0, 12);
+      inp.value = raw.replace(/(.{4})(?=.)/g, "$1-"); U.code.value = inp.value;
+      if (U.code.err) { U.code.err = ""; err.textContent = ""; inp.removeAttribute("aria-invalid"); }
+    });
+    inp.addEventListener("blur", () => { const n = normCode(inp.value); if (n && n.length < 12) { U.code.err = `Codes have 12 characters. This one has ${n.length}.`; err.textContent = U.code.err; inp.setAttribute("aria-invalid", "true"); } });
+    form.addEventListener("submit", (e) => {
+      e.preventDefault(); const res = checkCode(inp.value);
+      if (res.err) { U.code.err = res.err; U.code.result = null; err.textContent = res.err; inp.setAttribute("aria-invalid", "true"); return inp.focus(); }
+      U.code.result = res; U.code.value = fmtCode(res.code); rerender();
+      if (res.pass) { const b = $("[data-act=open-week]"); if (b) b.focus(); }
+    });
+  };
   MOUNT.clip = () => { if (!U.clip) startClip(); else if (U.clip.busy) attachClipCanvas(); };
   MOUNT.setup = () => {
     const form = $("#setup");
@@ -556,90 +575,41 @@
     cleanups.push(() => a.pause());
   }
 
-  /* ---------------- receipt OCR ---------------- */
-  let ocrWorker = null, ocrProgress = null;
-  const abs = (p) => new URL(p, location.href).href;
-  const loadScript = (src) => new Promise((res, rej) => { if ($(`script[src="${src}"]`)) return res(); const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
-  async function getOCR() {
-    if (ocrWorker) return ocrWorker;
-    await loadScript("lib/tesseract/tesseract.min.js");
-    ocrWorker = await window.Tesseract.createWorker("eng", 1, {
-      workerPath: abs("lib/tesseract/worker.min.js"), corePath: abs("lib/tesseract/core"), langPath: abs("lib/tesseract/lang"),
-      logger: (m) => ocrProgress && ocrProgress(m),
-    });
-    return ocrWorker;
+  /* ---------------- receipt codes ----------------
+     Format: 12 Crockford base-32 characters, shown as XXXX-XXXX-XXXX.
+     [2 purchase day][2 store][6 random][2 check]. The day lets the app enforce the 7-day window,
+     the check characters catch typos and made-up codes, and used codes are remembered. */
+  const ALPH = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+  const CODE_EPOCH = Date.UTC(2026, 0, 1), SALT = "kwentuhan-prototype";
+  const STORES = { 101: "WALMART SUPERCENTRE GARDEN CITY", 102: "REAL CANADIAN SUPERSTORE MCPHILLIPS", 103: "NO FRILLS WEST END", 104: "WALMART SUPERCENTRE KENASTON" };
+  const STORE_NAMES = { 101: "Walmart, Garden City", 102: "Real Canadian Superstore, McPhillips", 103: "No Frills, West End", 104: "Walmart, Kenaston" };
+  const enc = (n, len) => { let out = ""; for (let i = 0; i < len; i++) { out = ALPH[n % 32] + out; n = Math.floor(n / 32); } return out; };
+  const dec = (str) => [...str].reduce((n, ch) => n * 32 + ALPH.indexOf(ch), 0);
+  const dayNum = (t) => { const d = new Date(t); return Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - CODE_EPOCH) / DAY); };
+  const dayDate = (n) => { const u = new Date(CODE_EPOCH + n * DAY); return new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate()); };
+  function check2(body) { let h = 0x811c9dc5; for (const ch of body + SALT) { h ^= ch.charCodeAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return enc(h % 1024, 2); }
+  const normCode = (s) => String(s).toUpperCase().replace(/[\s-]/g, "").replace(/O/g, "0").replace(/[IL]/g, "1");
+  const fmtCode = (s) => normCode(s).replace(/(.{4})(?=.)/g, "$1-");
+  function makeCode(at, store) {
+    const rand = Array.from(crypto.getRandomValues(new Uint8Array(6)), (b) => ALPH[b % 32]).join("");
+    const body = enc(dayNum(at), 2) + enc(store, 2) + rand; return body + check2(body);
   }
-  async function prepImage(file) {
-    const img = await loadImg(URL.createObjectURL(file));
-    const k = Math.min(1, 1800 / Math.max(img.width, img.height)), c = document.createElement("canvas");
-    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-    const x = c.getContext("2d"); x.drawImage(img, 0, 0, c.width, c.height);
-    const d = x.getImageData(0, 0, c.width, c.height), p = d.data;
-    for (let i = 0; i < p.length; i += 4) { const g = Math.max(0, Math.min(255, (0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2] - 128) * 1.5 + 140)); p[i] = p[i + 1] = p[i + 2] = g; }
-    x.putImageData(d, 0, 0); URL.revokeObjectURL(img.src); return c;
-  }
-  function sampleReceipt() {
-    const now = new Date(), c = document.createElement("canvas"), W = 560, pad = (n) => String(n).padStart(2, "0");
-    const tc = Array.from({ length: 4 }, () => String(Math.floor(1000 + Math.random() * 9000))).join(" ");
-    const lines = [["c", "WALMART SUPERCENTRE"], ["c", "GARDEN CITY  WINNIPEG MB"], ["c", `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${String(now.getFullYear()).slice(2)}  ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`], ["-"],
-      ["l", "BANANAS", "1.29"], ["l", "JASMINE RICE 8KG", "21.97"], ["l", "COKE GLASS 2PK 237ML", "2.79"], ["l", "PANDESAL 12CT", "4.49"], ["-"],
-      ["l", "SUBTOTAL", "30.54"], ["l", "GST 5%", "1.53"], ["l", "TOTAL", "32.07"], ["l", "DEBIT TEND", "32.07"], ["-"], ["c", `TC# ${tc}`], ["c", "THANK YOU"]];
-    const LH = 38; c.width = W; c.height = 60 + lines.length * LH;
-    const x = c.getContext("2d"); x.fillStyle = "#FBFAF6"; x.fillRect(0, 0, W, c.height); x.fillStyle = "#111";
-    x.font = "600 25px 'Courier New', Courier, monospace"; x.textBaseline = "top";
-    lines.forEach((l, i) => {
-      const y = 30 + i * LH;
-      if (l[0] === "c") { x.textAlign = "center"; x.fillText(l[1], W / 2, y); }
-      else if (l[0] === "l") { x.textAlign = "left"; x.fillText(l[1], 28, y); x.textAlign = "right"; x.fillText(l[2], W - 28, y); }
-      else x.fillRect(28, y + 16, W - 56, 2);
-    });
-    return c;
-  }
-  async function sha(text) {
-    try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
-    catch { let h = 0; for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) | 0; return String(h); }
-  }
-  function findDates(text) {
-    const out = [], now = Date.now(), re = /(\d{1,4})\s*[\/\-.]\s*(\d{1,2})\s*[\/\-.]\s*(\d{2,4})/g, yy = (y) => (y < 100 ? 2000 + y : y);
-    let m;
-    while ((m = re.exec(text))) {
-      const [a, b, c] = [m[1], m[2], m[3]].map(Number);
-      const cands = m[1].length === 4 ? [[a, b, c]] : [[yy(c), a, b], [yy(c), b, a], [yy(a), b, c]];
-      cands.forEach(([y, mo, d]) => { if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31 && y > 2000 && y < 2100) { const t = new Date(y, mo - 1, d).getTime(); out.push({ t, age: (now - t) / DAY }); } });
-    }
-    return out;
-  }
-  async function checkReceipt(text) {
-    const T = text.toUpperCase();
-    const coke = /(COKE|COCA[\s-]*COLA|C0KE)/.test(T);
-    const glass = /(GLASS|GLS|BTL|BOTTLE|2\s*PK|2-?PACK|237\s*ML|8\s*OZ)/.test(T);
-    const dates = findDates(T), recent = dates.some((d) => d.age >= -1 && d.age <= 7);
-    const norm = T.replace(/[^A-Z0-9]/g, ""), hash = norm.length > 20 ? await sha(norm) : null, dup = !!hash && D.receipts.includes(hash);
+  function checkCode(raw) {
+    const code = normCode(raw);
+    if (!code) return { err: "Enter the code from your receipt" };
+    if ([...code].some((ch) => !ALPH.includes(ch))) return { err: `"${[...code].find((ch) => !ALPH.includes(ch))}" isn't used in codes. Check the receipt again.` };
+    if (code.length !== 12) return { err: `Codes have 12 characters. This one has ${code.length}.` };
+    const body = code.slice(0, 10);
+    if (check2(body) !== code.slice(10)) return { code, pass: false, checks: [{ ok: false, text: "This code doesn't match a receipt. Check for a typo." }] };
+    const day = dec(code.slice(0, 2)), store = dec(code.slice(2, 4)), age = dayNum(Date.now()) - day;
+    const used = D.receipts.includes(code), fresh = age >= 0 && age <= 7, when = fmtDate(dayDate(day), { month: "short", day: "numeric" });
     const checks = [
-      { ok: coke && glass, text: coke && glass ? "Glass Coke 2-pack found" : coke ? "Found Coke, but not a glass 2-pack" : "No glass Coke 2-pack on this receipt" },
-      dates.length ? { ok: recent, text: recent ? "Bought in the last 7 days" : "This receipt is more than 7 days old" } : { ok: true, warn: true, text: "Couldn't read a date. Accepted in this prototype." },
-      { ok: !dup, text: dup ? "This receipt was already used" : "Not used before" },
+      { ok: true, text: `Glass Coke 2-pack bought at ${STORE_NAMES[store] || "a participating store"}` },
+      { ok: fresh, text: fresh ? `Bought ${age === 0 ? "today" : when}, within 7 days` : age < 0 ? "This code's date is in the future" : `Bought ${when}. Codes work for 7 days.` },
+      { ok: !used, text: used ? "This code was already used" : "Not used before" },
     ];
-    return { checks, pass: checks.every((c) => c.ok), hash };
+    return { code, pass: checks.every((c) => c.ok), checks };
   }
-  async function runScan(source, previewURL) {
-    U.scan = { state: "reading", img: previewURL, pct: 0, msg: "Getting the scanner ready…" }; rerender();
-    ocrProgress = (m) => {
-      if (!U.scan || U.scan.state !== "reading") return;
-      if (m.status === "recognizing text") { U.scan.pct = m.progress; U.scan.msg = "Reading the receipt…"; }
-      const bar = $("#ocrbar"), msg = $("#ocrmsg"); if (bar) bar.style.width = `${Math.round(U.scan.pct * 100)}%`; if (msg) msg.textContent = U.scan.msg;
-    };
-    try {
-      const worker = await getOCR();
-      const { data } = await worker.recognize(source);
-      const res = await checkReceipt(data.text || "");
-      U.scan = { state: "done", img: previewURL, checks: res.checks, pass: res.pass, text: (data.text || "").trim(), hash: res.hash };
-    } catch {
-      U.scan = { state: "done", img: previewURL, checks: [{ ok: false, text: "The scanner couldn't start in this browser. Try the sample receipt or another browser." }], pass: false };
-    }
-    if (U.view === "scan") rerender();
-  }
-
   /* ---------------- canvas: card, clip, tapestry image ---------------- */
   const loadImg = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
   const patImgs = {};
@@ -895,7 +865,7 @@
       const to = el.dataset.go, extra = {};
       if (el.dataset.week) extra.week = +el.dataset.week;
       if (to === "story" && U.view !== "clip" && U.view !== "story") extra.from = U.view === "week" ? "week" : "tapestry";
-      if (to === "scan" && !(U.scan && U.scan.state === "reading")) U.scan = null;
+      if (to === "code") U.code = null;
       if (to === "clip" && U.clip && !U.clip.busy && (U.clip.week !== (extra.week || U.week) || U.clip.error)) U.clip = null;
       if (to === "tapestry" && U.view !== "story") U.season = null;
       if (to === "week" && U.view === "record" && !URLS.da) await clearDraft();
@@ -908,8 +878,9 @@
       case "close-sheet": return closeSheet();
       case "sample-family": D = newData({ youName: "Migs", fam: "Rosa", tellerName: "Rosa", called: "Lola", lang: "fil", sample: true }); await save(); go("week"); return toast("Sample family loaded: the Rosas");
       case "free": D.free[monthKey(w)] = w; D.unlocks[w] = { how: "free", at: new Date().toISOString() }; await save(); rerender(); return toast("This week's question is open");
-      case "sample-receipt": { const c = sampleReceipt(); return runScan(c, c.toDataURL("image/png")); }
-      case "open-week": if (U.scan && U.scan.hash) D.receipts.push(U.scan.hash); D.unlocks[w] = { how: "receipt", at: new Date().toISOString() }; U.scan = null; await save(); go("week"); return toast("Unlocked. Time to ask.");
+      case "sample-receipt": { const at = Date.now(), store = 101 + Math.floor(Math.random() * 4); U.code.sample = { at, store, code: makeCode(at, store) }; U.code.result = null; U.code.err = ""; await rerender(); const rc = $(".receiptcard"); if (rc) rc.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+      case "fill-code": U.code.value = fmtCode(U.code.sample.code); U.code.err = ""; U.code.result = null; rerender(); { const ci = $("#codein"); if (ci) { ci.focus({ preventScroll: true }); ci.scrollIntoView({ block: "center" }); } } return;
+      case "open-week": D.receipts.push(U.code.result.code); D.unlocks[w] = { how: "code", code: U.code.result.code, at: new Date().toISOString() }; U.code = null; await save(); go("week"); return toast("Unlocked. Time to ask.");
       case "pick-teller": U.teller = id; return rerender();
       case "ask": if (needConsent("record")) return; await startDraft("record"); return go("record");
       case "resume": U.teller = D.draft.teller; return go(URLS.da || D.draft.transcript ? "review" : "record");
@@ -955,11 +926,6 @@
   app.addEventListener("change", async (e) => {
     const inp = e.target; if (!inp.dataset || !inp.dataset.file || !inp.files || !inp.files[0]) return;
     const file = inp.files[0]; inp.value = "";
-    if (inp.dataset.file === "receipt") {
-      const prev = URL.createObjectURL(file);
-      try { return runScan(await prepImage(file), prev); }
-      catch { U.scan = { state: "done", img: prev, checks: [{ ok: false, text: "Couldn't open that photo. Try another." }], pass: false }; return rerender(); }
-    }
     if (inp.dataset.file === "photo") {
       try {
         const img = await loadImg(URL.createObjectURL(file)), k = Math.min(1, 1600 / Math.max(img.width, img.height)), c = document.createElement("canvas");

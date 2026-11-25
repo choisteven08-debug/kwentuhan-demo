@@ -1,5 +1,5 @@
 /* Network first, so new deploys show up straight away; falls back to cache when offline. */
-const CACHE = "kwentuhan-v2";
+const CACHE = "coke-tapestries-v3";
 const SHELL = ["./", "index.html", "styles.css", "app.js", "lib/qrcode.js", "favicon.svg",
   "assets/img/coca-cola-script-red.png", "assets/img/coca-cola-script-white.png", "assets/img/migs-and-lola.jpg",
   "assets/fonts/archivo-latin-standard-normal.woff2"];

@@ -1,4 +1,4 @@
-/* Kwentuhan: working prototype. Vanilla JS, no build step.
+/* Coke Tapestries: working prototype. Vanilla JS, no build step.
    Data lives on this device (IndexedDB). The only network call is translation, and only when the user taps Translate. */
 (() => {
   "use strict";
@@ -19,7 +19,7 @@
     let dbp = null;
     const open = () => dbp || (dbp = new Promise((res) => {
       try {
-        const r = indexedDB.open("kwentuhan", 1);
+        const r = indexedDB.open("kwentuhan", 1); // internal store name kept so saved stories survive the rename
         r.onupgradeneeded = () => { r.result.createObjectStore("kv"); r.result.createObjectStore("blobs"); };
         r.onsuccess = () => res(r.result); r.onerror = () => res(null); r.onblocked = () => res(null);
       } catch { res(null); }
@@ -580,7 +580,7 @@
      [2 purchase day][2 store][6 random][2 check]. The day lets the app enforce the 7-day window,
      the check characters catch typos and made-up codes, and used codes are remembered. */
   const ALPH = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
-  const CODE_EPOCH = Date.UTC(2026, 0, 1), SALT = "kwentuhan-prototype";
+  const CODE_EPOCH = Date.UTC(2026, 0, 1), SALT = "kwentuhan-prototype"; // unchanged so codes already printed still work
   const STORES = { 101: "WALMART SUPERCENTRE GARDEN CITY", 102: "REAL CANADIAN SUPERSTORE MCPHILLIPS", 103: "NO FRILLS WEST END", 104: "WALMART SUPERCENTRE KENASTON" };
   const STORE_NAMES = { 101: "Walmart, Garden City", 102: "Real Canadian Superstore, McPhillips", 103: "No Frills, West End", 104: "Walmart, Kenaston" };
   const enc = (n, len) => { let out = ""; for (let i = 0; i < len; i++) { out = ALPH[n % 32] + out; n = Math.floor(n / 32); } return out; };
@@ -833,7 +833,7 @@
     const d = mondayOf(Date.now() + 7 * DAY), pad = (n) => String(n).padStart(2, "0");
     const dt = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T090000`;
     const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, ""), url = `${location.origin}${location.pathname}`;
-    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kwentuhan prototype//EN", "BEGIN:VEVENT", `UID:kwentuhan-${uid()}@prototype`, `DTSTAMP:${stamp}`, `DTSTART:${dt}`, "DURATION:PT15M", "RRULE:FREQ=WEEKLY;BYDAY=MO",
+    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Coke Tapestries prototype//EN", "BEGIN:VEVENT", `UID:coke-tapestries-${uid()}@prototype`, `DTSTAMP:${stamp}`, `DTSTART:${dt}`, "DURATION:PT15M", "RRULE:FREQ=WEEKLY;BYDAY=MO",
       `SUMMARY:New family question for ${tellers()[0] ? display(tellers()[0]) : "Lola"}`, `DESCRIPTION:This week's question is ready. ${url}`, `URL:${url}`, "END:VEVENT", "END:VCALENDAR"].join("\r\n");
   }
 
@@ -896,7 +896,7 @@
       case "save-story": return saveStory();
       case "save-card": { const s = D.stories[U.week]; toast("Making the card…"); const r = await shareOrDownload(await canvasBlob(await drawCard(s)), `${slug(s.title)}.png`, { title: s.title }); return r === "downloaded" && toast("Card saved"); }
       case "save-clip": { const c = U.clip; download(c.blob, `${slug(D.stories[c.week].title)}.${c.ext}`); return toast("Video saved"); }
-      case "share-clip": { const c = U.clip, s = D.stories[c.week]; const r = await shareOrDownload(c.blob, `${slug(s.title)}.${c.ext}`, { title: s.title, text: "#cocacola #lola #kwentuhan" }); return r === "downloaded" && toast("Sharing isn't available here, so the video was saved"); }
+      case "share-clip": { const c = U.clip, s = D.stories[c.week]; const r = await shareOrDownload(c.blob, `${slug(s.title)}.${c.ext}`, { title: s.title, text: "#cocacola #lola #coketapestries" }); return r === "downloaded" && toast("Sharing isn't available here, so the video was saved"); }
       case "retry-clip": U.clip = null; return rerender();
       case "delete-story": {
         const s = D.stories[U.week]; if (!(await confirmSheet({ title: `Delete "${s.title}"?`, body: "The recording, photo and words for this week are removed from this phone. This can't be undone.", confirm: "Delete story" }))) return;
@@ -912,7 +912,7 @@
         if (!(await confirmSheet({ title: `Remove ${display(m)}?`, body: "Their saved stories stay in the tapestry. You can add them back later.", confirm: "Remove from family" }))) return;
         D.members = D.members.filter((x) => x.id !== id); await save(); rerender(); return toast("Removed");
       }
-      case "ics": download(new Blob([icsFile()], { type: "text/calendar" }), "kwentuhan-monday.ics"); return toast("Open the file to add it to your calendar");
+      case "ics": download(new Blob([icsFile()], { type: "text/calendar" }), "coke-tapestries-monday.ics"); return toast("Open the file to add it to your calendar");
       case "install": if (installEvt) { installEvt.prompt(); installEvt = null; return; } return toast(installHint());
       case "week+": D.family.offset = (D.family.offset || 0) + 1; await save(); go("week"); return toast(`It's Monday of week ${wis(weekNow())}`);
       case "week-": D.family.offset = (D.family.offset || 0) - 1; await save(); return rerender();

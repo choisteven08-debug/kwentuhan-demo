@@ -1,4 +1,4 @@
-# Kwentuhan: working prototype
+# Coke Tapestries: working prototype
 
 A working version of the BU111 live case recommendation: a weekly family question in the Coca-Cola app, unlocked by a glass Coke 2-pack. Lola answers by voice and the answer is kept in the family's tapestry.
 

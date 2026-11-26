@@ -979,7 +979,9 @@
   /* ---------------- boot ---------------- */
   const blankForm = () => ({ youName: "", fam: "", tellerName: "", called: "Lola", lang: "fil" });
   function desktopAside() {
-    const url = `${location.origin}${location.pathname}`;
+    // Always advertise the public link, even when the page is opened at an older address.
+    const PUBLIC_URL = "https://coke-tapestries.vercel.app/";
+    const url = /\.vercel\.app$/.test(location.hostname) ? PUBLIC_URL : `${location.origin}${location.pathname}`;
     const el = $("#qr"); if (el && window.qrcode) { const q = window.qrcode(0, "M"); q.addData(url); q.make(); el.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); }
     const u = $("#url"); if (u && !/^(localhost|127\.)/.test(location.hostname)) u.textContent = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
     const clock = () => { const c = $("#clock"); if (c) c.textContent = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(/\s?[AP]M/i, ""); };

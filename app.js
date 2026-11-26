@@ -19,7 +19,7 @@
     let dbp = null;
     const open = () => dbp || (dbp = new Promise((res) => {
       try {
-        const r = indexedDB.open("kwentuhan", 1); // internal store name kept so saved stories survive the rename
+        const r = indexedDB.open("coke-tapestries", 1);
         r.onupgradeneeded = () => { r.result.createObjectStore("kv"); r.result.createObjectStore("blobs"); };
         r.onsuccess = () => res(r.result); r.onerror = () => res(null); r.onblocked = () => res(null);
       } catch { res(null); }
@@ -580,7 +580,7 @@
      [2 purchase day][2 store][6 random][2 check]. The day lets the app enforce the 7-day window,
      the check characters catch typos and made-up codes, and used codes are remembered. */
   const ALPH = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
-  const CODE_EPOCH = Date.UTC(2026, 0, 1), SALT = "kwentuhan-prototype"; // unchanged so codes already printed still work
+  const CODE_EPOCH = Date.UTC(2026, 0, 1), SALT = "coke-tapestries-prototype";
   const STORES = { 101: "WALMART SUPERCENTRE GARDEN CITY", 102: "REAL CANADIAN SUPERSTORE MCPHILLIPS", 103: "NO FRILLS WEST END", 104: "WALMART SUPERCENTRE KENASTON" };
   const STORE_NAMES = { 101: "Walmart, Garden City", 102: "Real Canadian Superstore, McPhillips", 103: "No Frills, West End", 104: "Walmart, Kenaston" };
   const enc = (n, len) => { let out = ""; for (let i = 0; i < len; i++) { out = ALPH[n % 32] + out; n = Math.floor(n / 32); } return out; };

@@ -67,38 +67,6 @@
     capiz: "<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><rect width='12' height='12' fill='#F1ECDF'/><path d='M0 .5H12M.5 0V12' stroke='#CDBE9C' stroke-width='1'/></svg>",
     inabel: "<svg xmlns='http://www.w3.org/2000/svg' width='17' height='17'><rect width='17' height='17' fill='#EFEAE0'/><rect width='3' height='17' fill='#2E3B61'/><rect x='7' width='1' height='17' fill='#2E3B61'/><rect x='12' width='1' height='17' fill='#963A2B'/></svg>",
   };
-  /* Folk-art scenes, one per question. Stand-ins for the artist-drawn scenes a story gets when there's no photo. */
-  const C = "#F3E7CF", SAND = "#E6D3AA", T = "#B5523B", R = "#8E2A22", M = "#D9A441", G = "#3F7A55", LG = "#7FA65E", DG = "#2C5A3F", N = "#2E3B61", SKY = "#A9CADB", B = "#6B4A2F", INK = "#2A2420", W = "#FFFFFF", BLUSH = "#F3D9CF";
-  const svgScene = (body, bg) => `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 100 100'><rect width='100' height='100' fill='${bg}'/>${body}</svg>`;
-  const person = (x, y, s, head, body) => `<circle cx='${x}' cy='${y}' r='${4.2 * s}' fill='${head}'/><path d='M${x - 6 * s} ${y + 19 * s} Q${x - 6 * s} ${y + 5 * s} ${x} ${y + 5 * s} Q${x + 6 * s} ${y + 5 * s} ${x + 6 * s} ${y + 19 * s}Z' fill='${body}'/>`;
-  const SCENES = [
-    // 1 where she grew up: house and mango tree
-    svgScene(`<circle cx='80' cy='20' r='9' fill='${M}'/><rect y='72' width='100' height='28' fill='${LG}'/><rect x='12' y='50' width='30' height='24' fill='${T}'/><path d='M8 52 L27 35 L46 52Z' fill='${R}'/><rect x='23' y='60' width='8' height='14' fill='${B}'/><rect x='63' y='46' width='6' height='28' fill='${B}'/><circle cx='66' cy='38' r='17' fill='${G}'/><circle cx='54' cy='45' r='10' fill='${DG}'/><circle cx='78' cy='46' r='10' fill='${DG}'/><ellipse cx='58' cy='40' rx='2.6' ry='3.6' fill='${M}'/><ellipse cx='70' cy='32' rx='2.6' ry='3.6' fill='${M}'/><ellipse cx='75' cy='45' rx='2.6' ry='3.6' fill='${M}'/>`, C),
-    // 2 first day in Canada: snow at night
-    svgScene(`<circle cx='79' cy='18' r='7' fill='${C}'/><ellipse cx='28' cy='102' rx='62' ry='32' fill='${W}'/><ellipse cx='86' cy='106' rx='48' ry='30' fill='#E3EAF0'/><rect x='40' y='56' width='22' height='18' fill='${T}'/><path d='M36 58 L51 45 L66 58Z' fill='${W}'/><rect x='47' y='61' width='7' height='6' fill='${M}'/>${[[12,14],[30,26],[20,44],[52,20],[64,34],[88,40],[8,60],[76,58],[40,36],[94,24]].map(([x,y])=>`<circle cx='${x}' cy='${y}' r='1.5' fill='${W}'/>`).join("")}`, N),
-    // 3 first job: pandesal basket
-    svgScene(`<rect y='70' width='100' height='30' fill='${SAND}'/><path d='M38 22 q4 -6 0 -12 M50 18 q4 -6 0 -12 M62 22 q4 -6 0 -12' stroke='#CDBE9C' stroke-width='2' fill='none' stroke-linecap='round'/><ellipse cx='33' cy='53' rx='11' ry='8' fill='${M}' stroke='#B9842F' stroke-width='1.5'/><ellipse cx='50' cy='48' rx='12' ry='9' fill='${M}' stroke='#B9842F' stroke-width='1.5'/><ellipse cx='67' cy='53' rx='11' ry='8' fill='${M}' stroke='#B9842F' stroke-width='1.5'/><rect x='18' y='56' width='64' height='22' rx='6' fill='${B}'/><path d='M22 63h56M22 70h56' stroke='#8A6A48' stroke-width='2'/><path d='M30 56v22M42 56v22M54 56v22M66 56v22' stroke='#8A6A48' stroke-width='1.5'/>`, C),
-    // 4 kitchen rules: palayok and rice bowl
-    svgScene(`<rect y='70' width='100' height='30' fill='${SAND}'/><ellipse cx='30' cy='58' rx='19' ry='15' fill='${T}'/><rect x='15' y='40' width='30' height='7' rx='3' fill='${R}'/><path d='M22 40 q8 -8 16 0' stroke='${R}' stroke-width='2.5' fill='none'/><ellipse cx='69' cy='54' rx='15' ry='8' fill='${W}'/><path d='M53 56 A16 14 0 0 0 85 56Z' fill='${W}' stroke='${N}' stroke-width='2'/><path d='M57 62h24' stroke='${N}' stroke-width='2'/><path d='M80 30 L66 52 M86 32 L70 53' stroke='${B}' stroke-width='2.2' stroke-linecap='round'/>`, C),
-    // 5 first trip to Manila: jeepney
-    svgScene(`<circle cx='18' cy='18' r='8' fill='${M}'/><rect y='70' width='100' height='30' fill='#5E5A55'/><path d='M0 85h100' stroke='${W}' stroke-width='2' stroke-dasharray='8 6'/><path d='M14 70 Q12 50 18 36' stroke='${B}' stroke-width='3' fill='none'/><path d='M18 36 q-12 -2 -16 6 M18 36 q10 -6 16 0 M18 36 q-4 -10 -12 -10 M18 36 q8 -12 16 -8' stroke='${G}' stroke-width='3' fill='none' stroke-linecap='round'/><rect x='34' y='44' width='54' height='6' rx='2' fill='${M}'/><rect x='32' y='50' width='58' height='20' rx='4' fill='${R}'/><rect x='38' y='53' width='10' height='7' fill='${C}'/><rect x='51' y='53' width='10' height='7' fill='${C}'/><rect x='64' y='53' width='10' height='7' fill='${C}'/><path d='M32 64h58' stroke='${M}' stroke-width='2'/><circle cx='44' cy='71' r='6' fill='${INK}'/><circle cx='78' cy='71' r='6' fill='${INK}'/><circle cx='44' cy='71' r='2' fill='#BDBDBD'/><circle cx='78' cy='71' r='2' fill='#BDBDBD'/>`, SKY),
-    // 6 fiesta food: banderitas, bottles and a plate
-    svgScene(`<path d='M0 12 Q50 26 100 12' stroke='${B}' stroke-width='1' fill='none'/>${[[6,T],[20,M],[34,G],[48,N],[62,T],[76,M],[90,G]].map(([x,c])=>`<path d='M${x} ${14+Math.sin(x/32)*4} l10 1 l-5 10Z' fill='${c}'/>`).join("")}<rect y='68' width='100' height='32' fill='${SAND}'/><rect x='24' y='36' width='5' height='10' fill='#5A1A16'/><rect x='21' y='46' width='11' height='24' rx='4' fill='#5A1A16'/><rect x='38' y='38' width='5' height='10' fill='#5A1A16'/><rect x='35' y='48' width='11' height='22' rx='4' fill='#5A1A16'/><ellipse cx='72' cy='66' rx='20' ry='5' fill='${W}'/><path d='M58 64 q14 -16 28 0Z' fill='${T}'/><path d='M62 60 q10 -6 20 0' stroke='${R}' stroke-width='1.5' fill='none'/>`, C),
-    // 7 how they met: two people and a heart
-    svgScene(`<rect y='76' width='100' height='24' fill='${SAND}'/><path d='M50 30 c-6 -9 -18 -2 -10 7 l10 9 l10 -9 c8 -9 -4 -16 -10 -7Z' fill='${R}'/>${person(36, 46, 1.4, B, T)}${person(64, 46, 1.4, B, N)}`, BLUSH),
-    // 8 happiest Christmas: parol
-    svgScene(`${[[12,16],[86,14],[20,70],[90,64],[70,88],[30,90]].map(([x,y])=>`<circle cx='${x}' cy='${y}' r='1.4' fill='${C}'/>`).join("")}<path d='M50 18 L56 36 L75 36 L60 47 L66 66 L50 54 L34 66 L40 47 L25 36 L44 36Z' fill='${M}'/><path d='M50 30 L53 39 L62 39 L55 44 L58 53 L50 47 L42 53 L45 44 L38 39 L47 39Z' fill='${T}'/><path d='M44 62 L38 90 M50 58 L50 92 M56 62 L62 90' stroke='${M}' stroke-width='2' stroke-linecap='round'/>`, N),
-    // 9 best friend: kite and two kids
-    svgScene(`<rect y='72' width='100' height='28' fill='${LG}'/><path d='M68 12 L80 28 L68 44 L56 28Z' fill='${T}'/><path d='M68 12 V44 M56 28 H80' stroke='${C}' stroke-width='1.2'/><path d='M68 44 Q60 60 46 62' stroke='${INK}' stroke-width='1' fill='none'/>${person(34, 54, 1.0, B, M)}${person(48, 56, 0.95, B, G)}`, SKY),
-    // 10 her song: guitar and notes
-    svgScene(`<rect x='45' y='10' width='6' height='34' fill='${B}'/><rect x='43' y='6' width='10' height='7' rx='2' fill='${INK}'/><circle cx='48' cy='50' r='13' fill='#C98A3A'/><circle cx='48' cy='68' r='17' fill='#C98A3A'/><circle cx='48' cy='58' r='5' fill='${INK}'/><rect x='41' y='74' width='14' height='3' fill='${INK}'/><g fill='${N}'><ellipse cx='76' cy='40' rx='4' ry='3'/><rect x='79' y='22' width='1.6' height='18'/><ellipse cx='86' cy='34' rx='4' ry='3'/><rect x='89' y='16' width='1.6' height='18'/><rect x='79' y='16' width='11.6' height='3'/><ellipse cx='20' cy='30' rx='4' ry='3'/><rect x='23' y='14' width='1.6' height='16'/></g>`, C),
-    // 11 hardest decision: suitcase and plane
-    svgScene(`<rect y='76' width='100' height='24' fill='${SAND}'/><path d='M12 30 Q40 6 74 20' stroke='${N}' stroke-width='1.2' stroke-dasharray='3 3' fill='none'/><path d='M74 20 l12 -4 l-2 4 l4 2 l-4 1 l-1 4 l-3 -4 l-6 1Z' fill='${N}'/><rect x='26' y='44' width='48' height='34' rx='4' fill='${T}'/><path d='M42 44 v-6 h16 v6' stroke='${INK}' stroke-width='3' fill='none'/><rect x='36' y='44' width='5' height='34' fill='${M}'/><rect x='59' y='44' width='5' height='34' fill='${M}'/>`, C),
-    // 12 never forget: three generations
-    svgScene(`<path d='M10 76 A40 40 0 0 1 90 76Z' fill='${M}' opacity='.55'/><rect y='76' width='100' height='24' fill='${SAND}'/>${person(32, 42, 1.5, B, R)}${person(54, 50, 1.2, B, N)}${person(72, 58, 0.85, B, G)}`, BLUSH),
-  ];
-  const sceneURL = (w) => svgData(SCENES[(w - 1) % 12]);
-  const pic = (story) => photoURL(story.photo) || sceneURL(story.week);
   const PAT = Object.fromEntries(Object.entries(PAT_SVG).map(([k, v]) => [k, `url('${svgData(v)}')`]));
   const FRAMES = [
     { id: "banig", name: "Banig", note: "Woven mat pattern, Samar" },
@@ -252,7 +220,7 @@
     const head = `<div class="page"><div class="eyebrow">Week ${wis(w)} · Season ${seasonOf(w)} · ${fmtDate(mondayFor(w), { weekday: "long", month: "long", day: "numeric" })}</div><h2 class="title" tabindex="-1">This week's question</h2></div>`;
     let body;
     if (story) {
-      const ph = pic(story);
+      const ph = photoURL(story.photo);
       body = `${head}<div class="page mt4"><div class="q-tl">${esc(q1)}</div><div class="q-en">${esc(q2)}</div></div>
         <div style="padding:var(--s5) var(--s4) 0"><button style="display:block;width:100%;text-align:left" data-go="story" data-week="${w}" aria-label="Open ${esc(story.title)}">
           ${framed(story.frame, `${ph ? `<div class="story-photo" style="background-image:url('${ph}')"></div>` : ""}<div style="padding:12px 14px 14px"><div class="quote" style="font-size:1.0625rem">“${esc(story.quote)}”</div><div class="caption mt1">${esc(display(member(story.teller)))} · saved ${fmtDate(story.at)}</div></div>`)}
@@ -387,17 +355,16 @@
     return `${nav("Back", "review", "Photo")}
       <div class="view"><div class="page"><h2 class="title" tabindex="-1">Add a photo of you two</h2><p class="caption mt1">Best with both glasses in the shot.</p></div>
       <div style="padding:var(--s4) var(--s4) 0">${ph ? `<div class="story-photo" style="border-radius:var(--radius);background-image:url('${ph}')" role="img" aria-label="Chosen photo"></div>`
-        : dr.photo === "none" ? `<div class="story-photo" style="border-radius:var(--radius);background-image:url('${sceneURL(dr.week)}')" role="img" aria-label="Illustrated scene for this week's question"></div>`
-        : `<div class="viewfinder" style="margin:0;aspect-ratio:16/10;background:var(--surface-sunken)"><div class="placeholder" style="color:var(--text-secondary)">${ic("camera", 36, 1.4)}<div class="mt2">No photo yet</div></div></div>`}</div>
+        : `<div class="viewfinder" style="margin:0;aspect-ratio:16/10;background:var(--surface-sunken)"><div class="placeholder" style="color:var(--text-secondary)">${ic("camera", 36, 1.4)}<div class="mt2">${dr.photo === "none" ? "No photo. The card will show her words." : "No photo yet"}</div></div></div>`}</div>
       <div class="footer-actions">
         <span class="${chosen ? "secondary" : "primary"} filebtn">${ic("camera", 20)} ${ph ? "Change photo" : "Take or choose a photo"}<input type="file" accept="image/*" data-file="photo" aria-label="Take or choose a photo"></span>
         ${dr.photo === "sample" ? "" : `<button class="secondary" data-act="sample-photo">Use the sample photo</button>`}
-        ${chosen ? `<button class="primary" data-go="frame">Next: choose a frame</button>` : `<button class="secondary" data-act="no-photo">Use an illustrated scene instead</button>`}
+        ${chosen ? `<button class="primary" data-go="frame">Next: choose a frame</button>` : `<button class="secondary" data-act="no-photo">Skip, use her words only</button>`}
       </div></div>`;
   };
 
   V.frame = () => {
-    const dr = D.draft, ph = photoURL(dr.photo) || sceneURL(dr.week), quote = draftQuote();
+    const dr = D.draft, ph = photoURL(dr.photo), quote = draftQuote();
     return `${nav("Photo", "photo", "Frame")}
       <div class="view"><h2 class="sr-only" tabindex="-1">Choose a frame</h2>
       <div style="padding:var(--s2) var(--s4) 0">${framed(dr.frame, `${ph ? `<div class="story-photo" style="background-image:url('${ph}')"></div>` : ""}<div style="padding:12px 14px 14px"><div class="quote" style="font-size:1.0625rem">“${esc(quote.en)}”</div></div>`)}</div>
@@ -408,10 +375,10 @@
 
   V.story = () => {
     const w = U.week, s = D.stories[w]; if (!s) { U.view = "tapestry"; return V.tapestry(); }
-    const t = member(s.teller), ph = pic(s), from = U.from === "week" ? "week" : "tapestry";
+    const t = member(s.teller), ph = photoURL(s.photo), from = U.from === "week" ? "week" : "tapestry";
     return `${nav(from === "week" ? "This Week" : "Tapestry", from, `Week ${wis(w)}`, `<button class="tap" data-go="clip" aria-label="Make a clip to share">${ic("share", 23)}</button>`)}
       <div class="view"><div class="page"><div class="eyebrow">Season ${seasonOf(w)}, week ${wis(w)} · ${fmtDate(mondayFor(w), { month: "long", day: "numeric" })}${s.sample ? " · sample story" : ""}</div><h2 class="title" tabindex="-1">${esc(s.title)}</h2><div class="caption" style="font-size:.9375rem">${esc(display(t) || "Former member")} · ${esc(qFor(w).en)}</div></div>
-      <div style="padding:var(--s4) var(--s5) 0">${framed(s.frame, `<div class="story-photo" role="img" aria-label="${photoURL(s.photo) ? "Family photo" : "Illustrated scene for this question"}" style="background-image:url('${ph}')"></div>`)}</div>
+      <div style="padding:var(--s4) var(--s5) 0">${framed(s.frame, ph ? `<div class="story-photo" role="img" aria-label="Family photo" style="background-image:url('${ph}')"></div>` : `<div class="cardtext"><div class="quote">“${esc(s.quote)}”</div></div>`)}</div>
       ${ph ? `<div class="page mt3"><div class="quote">“${esc(s.quote)}”</div>${s.quoteTl ? `<div class="muted mt2" style="font-size:.9375rem">“${esc(s.quoteTl)}”</div>` : ""}</div>` : s.quoteTl ? `<div class="page mt3 muted">“${esc(s.quoteTl)}”</div>` : ""}
       ${s.audio && URLS[s.audio] ? `<div class="player page mt4"><button class="play" id="play" aria-label="Play the recording">${PLAY}</button><div style="flex:1"><div class="track"><i id="prog"></i></div><div class="times"><span id="tcur">0:00</span><span id="trem">-${fmt(s.duration || 0)}</span></div></div></div>`
         : `<p class="caption page mt4">${s.sample ? "Sample story: no recording attached." : "No recording saved with this story."}</p>`}
@@ -436,9 +403,9 @@
     const inSeason = stories.filter((s) => seasonOf(s.week) === season);
     const squares = Array.from({ length: 12 }, (_, i) => {
       const wk = base + i + 1, s = D.stories[wk];
-      if (s) return `<button class="tile ${U.justAdded === wk ? "new" : ""}" style="background:${PAT[s.frame]}" data-go="story" data-week="${wk}" aria-label="Week ${i + 1}: ${esc(s.title)}"><span class="art" style="background-image:url('${pic(s)}')"></span><span class="wk">${i + 1}</span></button>`;
-      if (wk === w) return `<button class="slot now" data-go="week" aria-label="Week ${i + 1}: this week, not saved yet"><span>${i + 1}</span></button>`;
-      return `<button class="slot" disabled aria-label="Week ${i + 1}: ${wk < w ? "missed" : "coming"}"><span>${i + 1}</span></button>`;
+      if (s) return `<button class="${U.justAdded === wk ? "new" : ""}" style="background:${PAT[s.frame]}" data-go="story" data-week="${wk}" aria-label="Week ${i + 1}: ${esc(s.title)}"></button>`;
+      if (wk === w) return `<button class="now" data-go="week" aria-label="Week ${i + 1}: this week, not saved yet"></button>`;
+      return `<button disabled aria-label="Week ${i + 1}: ${wk < w ? "missed" : "coming"}"></button>`;
     }).join("");
     U.justAdded = null;
     const seasons = [...new Set([...stories.map((s) => seasonOf(s.week)), seasonOf(w)])].sort((a, b) => a - b);
@@ -447,7 +414,7 @@
       ${seasons.length > 1 ? `<div class="seg" role="group" aria-label="Season">${seasons.map((n) => `<button data-act="season" data-n="${n}" aria-pressed="${n === season}">Season ${n}</button>`).join("")}</div>` : ""}
       <div class="quilt" role="group" aria-label="${inSeason.length} of 12 squares woven">${squares}</div>
       <div class="group-label">Stories</div>
-      ${stories.length ? `<div class="list">${stories.map((s) => `<button class="row" data-go="story" data-week="${s.week}"><span class="swatch framed-sw" style="background:${PAT[s.frame]}"><span style="background-image:url('${pic(s)}')"></span></span><span class="grow"><span class="r1" style="display:block">${esc(s.title)}</span><span class="r2" style="display:block">Season ${seasonOf(s.week)}, week ${wis(s.week)} · ${esc(display(member(s.teller)))}${s.duration ? ` · ${Math.max(1, Math.round(s.duration / 60))} min` : ""}</span></span><span class="chev">${ic("chev", 18)}</span></button>`).join("")}</div>`
+      ${stories.length ? `<div class="list">${stories.map((s) => `<button class="row" data-go="story" data-week="${s.week}"><span class="swatch" style="background:${PAT[s.frame]}"></span><span class="grow"><span class="r1" style="display:block">${esc(s.title)}</span><span class="r2" style="display:block">Season ${seasonOf(s.week)}, week ${wis(s.week)} · ${esc(display(member(s.teller)))}${s.duration ? ` · ${Math.max(1, Math.round(s.duration / 60))} min` : ""}</span></span><span class="chev">${ic("chev", 18)}</span></button>`).join("")}</div>`
         : `<div class="empty"><div class="heading">No squares yet</div><p>Your first square is woven in when you save this week's answer.</p><div class="footer-actions" style="padding:var(--s4) 0 0"><button class="primary" data-go="week">Go to this week</button></div></div>`}
       </div>${tabbar("tapestry")}`;
   };
@@ -662,7 +629,7 @@
     x.fillStyle = "#FFFFFF"; x.fillRect(0, 0, W, H);
     const logo = await loadImg("assets/img/coca-cola-script-red.png"); x.drawImage(logo, 72, 64, 190, 190 * logo.height / logo.width);
     x.fillStyle = "#5E5E5E"; x.font = `400 28px ${FONT}`; x.textAlign = "right"; x.fillText(`Week ${wis(s.week)} · ${fmtDate(mondayFor(s.week), { month: "long", day: "numeric", year: "numeric" })}`, W - 72, 106); x.textAlign = "left";
-    const ph = pic(s), fx = 72, fy = 170, fw = W - 144;
+    const ph = photoURL(s.photo), fx = 72, fy = 170, fw = W - 144;
     x.fillStyle = await pattern(x, s.frame, 3);
     if (ph) {
       const img = await loadImg(ph), ih = Math.round((fw - 56) * 0.68);
@@ -685,21 +652,15 @@
     await fontsReady();
     const season = seasonOf(U.season || weekNow()), base = (season - 1) * 12;
     const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
-    x.fillStyle = "#F4EDDD"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#FFFFFF"; x.fillRect(0, 0, W, H);
     const logo = await loadImg("assets/img/coca-cola-script-red.png"); x.drawImage(logo, 72, 64, 170, 170 * logo.height / logo.width);
     x.fillStyle = "#141414"; x.font = `800 76px ${FONT}`; x.fillText(`The ${D.family.name} family`, 72, 230);
     x.fillStyle = "#5E5E5E"; x.font = `400 32px ${FONT}`; x.fillText(`Tapestry · Season ${season}`, 72, 280);
     const g = 12, cols = 4, size = (W - 144 - g * (cols - 1)) / cols;
     for (let i = 0; i < 12; i++) {
       const s = D.stories[base + i + 1], cx = 72 + (i % cols) * (size + g), cy = 330 + Math.floor(i / cols) * (size + g);
-      if (!s) { x.strokeStyle = "#CDBE9C"; x.setLineDash([8, 6]); x.lineWidth = 2; rr(x, cx + 2, cy + 2, size - 4, size - 4, 6); x.stroke(); x.setLineDash([]);
-        x.fillStyle = "#B8A98A"; x.font = `600 28px ${FONT}`; x.textAlign = "center"; x.fillText(String(i + 1), cx + size / 2, cy + size / 2 + 10); x.textAlign = "left"; continue; }
-      x.fillStyle = await pattern(x, s.frame, 4); rr(x, cx, cy, size, size, 6); x.fill();
-      const art = await loadImg(pic(s)); x.save(); rr(x, cx + 14, cy + 14, size - 28, size - 28, 3); x.clip(); cover(x, art, cx + 14, cy + 14, size - 28, size - 28, 0.4); x.restore();
-      x.fillStyle = "rgba(255,255,255,.92)"; rr(x, cx + 22, cy + size - 62, size - 44, 38, 5); x.fill(); x.fillStyle = "#141414"; let fs = 20; x.font = `600 ${fs}px ${FONT}`;
-      while (x.measureText(s.title).width > size - 64 && fs > 14) { fs--; x.font = `600 ${fs}px ${FONT}`; }
-      let label = s.title; while (x.measureText(label).width > size - 64 && label.length > 4) label = label.slice(0, -2) + "…";
-      x.fillText(label, cx + 32, cy + size - 37);
+      x.fillStyle = s ? await pattern(x, s.frame, 4) : "#E9E7E3"; rr(x, cx, cy, size, size, 8); x.fill();
+      if (s) { x.fillStyle = "rgba(255,255,255,.92)"; rr(x, cx + 12, cy + size - 58, size - 24, 46, 6); x.fill(); x.fillStyle = "#141414"; x.font = `600 22px ${FONT}`; x.fillText(wrap(x, s.title, size - 48)[0], cx + 24, cy + size - 27); }
     }
     const n = Object.values(D.stories).filter((s) => seasonOf(s.week) === season).length;
     x.font = `400 28px ${FONT}`; x.fillStyle = "#5E5E5E"; x.fillText(`${n} of 12 weeks woven · ${tellers().map(display).join(", ")}`, 72, 330 + 3 * (size + g) + 60);
@@ -721,7 +682,7 @@
       await fontsReady();
       const W = 720, H = 1280, cv = document.createElement("canvas"); cv.width = W; cv.height = H; clipCanvasSrc = cv;
       const x = cv.getContext("2d"), bg = document.createElement("canvas"); bg.width = W; bg.height = H; const b = bg.getContext("2d");
-      const ph = pic(s), img = ph ? await loadImg(ph) : null, logo = await loadImg("assets/img/coca-cola-script-white.png");
+      const ph = photoURL(s.photo), img = ph ? await loadImg(ph) : null, logo = await loadImg("assets/img/coca-cola-script-white.png");
       b.fillStyle = "#111"; b.fillRect(0, 0, W, H);
       if (img) { const t = document.createElement("canvas"); t.width = 24; t.height = 42; cover(t.getContext("2d"), img, 0, 0, 24, 42, 0.4); b.imageSmoothingQuality = "high"; b.drawImage(t, 0, 0, W, H); b.fillStyle = "rgba(0,0,0,.55)"; b.fillRect(0, 0, W, H); }
       b.drawImage(logo, 40, 64, 150, 150 * logo.height / logo.width);

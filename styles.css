@@ -240,21 +240,9 @@ mark { background: var(--highlight); color: inherit; border-radius: 3px; padding
 .live { margin-top: var(--s4); min-height: 72px; font-size: 1rem; line-height: 1.45; }
 .live .interim { color: var(--text-secondary); }
 .opt[aria-checked="true"] .r1 { font-weight: 650; }
-/* Tapestry: framed squares stitched onto linen */
-.quilt { --linen: #F1E9D8; --stitch: rgba(107, 74, 47, .38); background: var(--linen); border: 0; gap: 7px; padding: 14px; border-radius: 6px; outline: 1.5px dashed var(--stitch); outline-offset: -6px; }
-@media (prefers-color-scheme: dark) { .quilt { --linen: #2A251E; --stitch: rgba(241, 233, 216, .28); } }
-.quilt button { aspect-ratio: 1; display: block; width: 100%; position: relative; border-radius: 2px; }
-.quilt .tile { padding: 4px; }
-.quilt .tile .art { display: block; width: 100%; height: 100%; background-size: cover; background-position: center 40%; border-radius: 1px; }
-.quilt .tile .wk { position: absolute; left: 7px; bottom: 7px; min-width: 16px; padding: 1px 4px; border-radius: 2px; background: rgba(255, 255, 255, .9); color: #2A2420; font: 700 10px/1.3 var(--font); text-align: center; }
-.quilt .slot { background: transparent; border: 1.5px dashed var(--stitch); display: flex; align-items: center; justify-content: center; }
-.quilt .slot span { font: 600 .8125rem var(--font); color: var(--stitch); }
-.quilt .slot.now { border-color: var(--accent); }
-.quilt .slot.now span { color: var(--accent); }
-.quilt .slot[disabled] { cursor: default; }
-.quilt .tile.new { animation: weave .9s ease-out both; }
-.framed-sw { padding: 3px; }
-.framed-sw span { display: block; width: 100%; height: 100%; background-size: cover; background-position: center; border-radius: 4px; }
+.quilt button { aspect-ratio: 1; border-radius: 3px; background: var(--fill); display: block; width: 100%; }
+.quilt button.now { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.quilt button[disabled] { cursor: default; }
 .empty { padding: var(--s8) var(--s5); text-align: left; }
 .empty .heading { font-size: 1.0625rem; }
 .empty p { color: var(--text-secondary); margin-top: var(--s1); font-size: .9375rem; }
